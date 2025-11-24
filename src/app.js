@@ -1,25 +1,26 @@
+// app.js
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { userRouter } from "./routes/users.routes.js";
 
 const app = express();
 
-app.use(cors(
-    {
-        origin: process.env.CORS_ORIGIN,
-        Credential: true
-    }
-));
+app.use(cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true
+}));
 
-app.use(express.json({limit:"16kb"}))
+app.use(express.json({ limit: "16kb" }));
+app.use(express.urlencoded({ extended: true, limit: "16kb" }));
+app.use(cookieParser());
 
-app.use(express.urlencoded({extended:true, limit:"16kb"}))
+// test route to check router works
+app.get("/test", (req, res) => {
+    res.send("App.js is working");
+});
 
-app.use(express.static("public"))
+// routes
+app.use("/api/users", userRouter);
 
-// cookie parser will be used to manupliate with user cookies
-
-app.use(cookieParser())
-
-// Middlewares:
-// 
+export { app };
